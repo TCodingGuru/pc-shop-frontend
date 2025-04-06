@@ -1,38 +1,47 @@
-# end_assignment_front
-URL:
-Niet verplict
+Install Node.js
+Download and install Node.js from here.
 
-Credentials:
+Install Dependencies
+Once Node.js is installed, navigate to the project folder and run the following command to install the project dependencies:
 
+bash
+Copy
+Edit
+npm install
+Development Setup
+Run the Development Server
+To start the development server and enable hot-reloading, use the following command:
+
+bash
+Copy
+Edit
+npm run serve
+Build for Production
+When you're ready to build the project for production, run:
+
+bash
+Copy
+Edit
+npm run build
+Lint and Fix Files
+To run the linter and automatically fix some issues, use:
+
+bash
+Copy
+Edit
+npm run lint
+Credentials
 User:
-gilly
-wachtwoord
+
+Username: gilly
+
+Password: wachtwoord
 
 Admin:
-Mark_admin
-wachtwoord
 
-## Project setup
+Username: mark
 
-install nodejs on https://nodejs.org/en/download
-```
-npm install
-```
+Password: wachtwoord
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+Customize Configuration
+For more information about customizing the configuration of the project, you can check out the Configuration Reference.
