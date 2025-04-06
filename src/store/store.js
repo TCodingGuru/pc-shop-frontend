@@ -52,8 +52,9 @@ const store = createStore({
             return new Promise((resolve, reject) => {
                 axios.post('/users/login', {username: params.username, password: params.password})
                 .then((result) => {
+                    console.log(result);
                     axios.defaults.headers.common["Authorization"] = "Bearer " + result.data.token;
-                    console.log(result.data.username);
+                    console.log('Username:', result.data.username); 
                     localStorage.setItem('token', result.data.token);
                     localStorage.setItem('username', result.data.username);
                     localStorage.setItem('role', result.data.role );

@@ -56,6 +56,7 @@ export default {
     fetch() {
       axios.get('http://localhost/products?offset=' + this.offset + '&limit=' + this.limit)
       .then((res) => {
+        console.log('Raw response data:', res);
         var data = res.data;
         if (data.length == 0) {
           this.back(this.limit);
