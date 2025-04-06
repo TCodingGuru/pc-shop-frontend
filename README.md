@@ -1,47 +1,37 @@
-Install Node.js
-Download and install Node.js from here.
+This is a pc webshop which talks to the backend (PHP)
+## Project setup
 
-Install Dependencies
-Once Node.js is installed, navigate to the project folder and run the following command to install the project dependencies:
-
-bash
-Copy
-Edit
+install nodejs on https://nodejs.org/en/download
+```
 npm install
-Development Setup
-Run the Development Server
-To start the development server and enable hot-reloading, use the following command:
+```
 
-bash
-Copy
-Edit
+### Compiles and hot-reloads for development
+```
 npm run serve
-Build for Production
-When you're ready to build the project for production, run:
+```
 
-bash
-Copy
-Edit
+### Compiles and minifies for production
+```
 npm run build
-Lint and Fix Files
-To run the linter and automatically fix some issues, use:
+```
 
-bash
-Copy
-Edit
+### Lints and fixes files
+```
 npm run lint
-Credentials
+```
+
+Credentials:
+
 User:
-
-Username: gilly
-
-Password: wachtwoord
+gilly
+wachtwoord = wachtwoord
 
 Admin:
+mark
+wachtwoord = wachtwoord
 
-Username: mark
 
-Password: wachtwoord
 
-Customize Configuration
-For more information about customizing the configuration of the project, you can check out the Configuration Reference.
+### Customize configuration
+See [Configuration Reference](https://cli.vuejs.org/config/).
