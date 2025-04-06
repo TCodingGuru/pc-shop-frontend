@@ -1,37 +1,38 @@
 <template>
+  <!-- Column for product card -->
+  <div class="col-sm-6 col-lg-3">
+    <div class="card h-100 d-flex flex-column justify-content-between">
+      <img :src="product.image" class="card-img-top p-3" alt="product" />
 
-  <!-- Column with card for product -->
-  <div class="col-md-12 col-lg-4 mb-4 mb-lg-4">
-    <div class="card">
-      <img :src="product.image" class="card-img-top p-5" alt="product" />
-      <div class="card-body">
-        <p class="small">
-          <a href="#!" class="text-muted">{{ product.category_Name }}</a>
-        </p>
+      <div class="card-body d-flex flex-column">
+        <p class="text-muted mb-2">{{ product.category_Name }}</p>
 
-        <div class="d-flex justify-content-between mb-3">
-          <h5 class="mb-0">{{ product.name }}</h5>
-          <h5 class="text-dark mb-0">€ {{ product.price }}</h5>
+        <h5 class="card-title">{{ product.name }}</h5>
+
+        <div class="mb-2">
+          <p class="card-text text-dark fw-bold">€ {{ product.price }}</p>
+          <p class="card-text text-muted">Available: <strong>{{ product.amount }}</strong></p>
         </div>
 
-        <div class="d-flex justify-content-between mb-2">
-          <p class="text-muted mb-0">
-            Available: <span class="fw-bold">{{ product.amount }}</span>
-          </p>
-        </div>
-
-        <div class="d-flex justify-content-between mb-2">
-          <div>
+        <div class="mt-auto d-flex flex-wrap gap-2 justify-content-between">
+          <!-- Admin options -->
+          <div v-if="$store.state.role === 'Admin'" class="d-flex gap-2">
             <router-link
-              v-if="$store.state.role == 'Admin'"
-              v-bind:to="'/editProduct/' + product.product_ID"
-              class="btn btn-warning m-1"
-              role="button"
-              >Edit</router-link
+              :to="'/editProduct/' + product.product_ID"
+              class="btn"
             >
-            <button v-if="$store.state.role == 'Admin'" type="button" @click="$emit('deleteProduct', product)" class="btn btn-danger">Delete</button>
+              Edit
+            </router-link>
+            <button
+              class="btn"
+              @click="$emit('deleteProduct', product)"
+            >
+              Delete
+            </button>
           </div>
-          <button type="button" class="btn btn-secondary">Add to cart</button>
+
+          <!-- General user: Add to cart -->
+          <button type="button" class="btn">Add to Cart</button>
         </div>
       </div>
     </div>
@@ -47,5 +48,69 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+.col-sm-6.col-lg-3 {
+  flex: 1 0 21%;
+  max-width: 300px;
+  margin-bottom: 20px;
+}
+
+.card {
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: all 0.3s ease-in-out;
+  height: 100%;
+}
+
+.card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.card-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 20px;
+}
+
+.card-title {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.card-text {
+  font-size: 1rem;
+  color: #666;
+  margin-bottom: 10px;
+}
+
+/* Button styling */
+.card .btn {
+  background-color: #FAFAFA;
+  color: #333;
+  border: 2px solid #333;
+  border-radius: 5px;
+  padding: 8px 16px;
+  text-align: center;
+  font-size: 0.9rem;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  display: inline-block;
+}
+
+.card .btn:hover {
+  background-color: #333;
+  color: #FAFAFA;
+  border: 2px solid #FAFAFA;
+}
+
+.card .btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.2);
+}
 </style>

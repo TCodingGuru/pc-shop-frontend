@@ -1,33 +1,41 @@
 <template>
   <nav class="navbar navbar-expand navbar-dark bg-dark">
-  <div class="container">
+    <div class="container">
 
-    <!-- Navbar items left -->
-    <div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
-      <ul class="navbar-nav me-auto">
-        <li class="nav-item">
-          <router-link to="/" class="nav-link">Home</router-link>
-        </li>
-        <li class="nav-item">
-          <router-link to="/products" class="nav-link">Products</router-link>
-        </li>
-      </ul>
+      <!-- Navbar Left -->
+      <div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
+        <ul class="navbar-nav me-auto">
+          <li class="nav-item">
+            <router-link to="/" class="nav-link">Home</router-link>
+          </li>
+          <li class="nav-item">
+            <router-link to="/products" class="nav-link">Products</router-link>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Navbar Right -->
+      <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <button 
+              v-if="$store.state.logged_in" 
+              class="nav-link btn btn-link p-0 text-decoration-none"
+              @click="logout">
+              Logout
+            </button>
+            <router-link 
+              v-else 
+              to="/login" 
+              class="nav-link">
+              Login
+            </router-link>
+          </li>
+        </ul>
+      </div>
+
     </div>
-
-    <!-- Navbar items right -->
-    <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
-      <ul class="navbar-nav ms-auto">
-        <!-- when logged in, show logout butten and when not logged, show login -->
-        <li class="nav-item">
-          <a v-if="$store.state.logged_in" class="nav-link" @click="this.logout()">Logout</a>
-          <router-link v-else to="/login" class="nav-link">Login</router-link>
-          <!-- <router-link v-else to="/login" class="nav-link">login</router-link> -->
-        </li>
-      </ul>
-    </div>
-
-  </div>
-</nav>
+  </nav>
 </template>
 
 <script>
@@ -36,15 +44,15 @@ export default {
   methods: {
     logout() {
       this.$store.dispatch('logout')
-      .then(() => {
-        this.$router.push('/')
-      })
-      .catch((error) => console.log(error))
+        .then(() => {
+          this.$router.push('/')
+        })
+        .catch(console.error)
     },
-  }
+  },
 }
 </script>
 
-<style>
-
+<style scoped>
+/* Optional custom styling */
 </style>

@@ -1,15 +1,11 @@
 <template>
   <div class="container">
     <h2 class="mt-3 mt-lg-5">Edit product:</h2>
-  </div>
 
-  <!-- container for edit form -->
-  <div class="container">
     <div class="row">
-      <div class="col-md-12 col-lg-4 mb-4 mb-lg-4">
-        <form>
-
-          <!-- labels and input fields -->
+      <div class="col-md-12 col-lg-4 mb-4">
+        <form @submit.prevent="update">
+          <!-- Product Name -->
           <div class="form-group">
             <label for="productName">Product name:</label>
             <input
@@ -17,61 +13,72 @@
               class="form-control"
               id="productName"
               v-model="product.name"
+              required
             />
           </div>
 
+          <!-- Product Price -->
           <div class="form-group">
             <label for="productPrice">Price:</label>
             <input
               type="number"
               class="form-control"
-              id="productName"
+              id="productPrice"
               v-model="product.price"
+              min="0"
+              step="0.01"
+              required
             />
           </div>
 
+          <!-- Category -->
           <div class="form-group">
             <label for="productCat">Category:</label>
             <select
               class="form-control"
               id="productCat"
               v-model="product.category_ID"
+              required
             >
               <option
                 v-for="category in categories"
-                :key="category.id"
-                v-bind:value="category.category_ID"
+                :key="category.category_ID"
+                :value="category.category_ID"
               >
                 {{ category.name }}
               </option>
             </select>
           </div>
 
+          <!-- Image -->
           <div class="form-group">
-            <label for="productName">Image:</label>
+            <label for="productImage">Image URL:</label>
             <input
               type="text"
               class="form-control"
-              id="productName"
+              id="productImage"
               v-model="product.image"
+              required
             />
           </div>
 
+          <!-- Buttons -->
           <div class="mt-2">
-            <!-- Cancel button -->
-            <button
-            type="button"
-            class="btn btn-danger m-1"
-            @click="this.$router.push('/products')">Cancel
-            </button>
-
-            <!-- Submit button -->
             <button
               type="button"
-              class="btn btn-success"
-              @click="this.update()">Update</button>
-          </div>
+              class="btn btn-danger m-1"
+              @click="cancel"
+            >
+              Cancel
+            </button>
 
+            <button
+              type="submit"
+              class="btn btn-success"
+            >
+              Update
+            </button>
+          </div>
         </form>
       </div>
     </div>
@@ -80,6 +87,7 @@
 
 <script>
 import axios from "axios";
+
 export default {
   name: "EditProduct",
   data() {
@@ -97,34 +105,45 @@ export default {
       categories: [],
     };
   },
-  mounted() {
-    axios
-      .get("http://localhost/products/" + this.id)
-      .then((res) => {
-        this.product = res.data;
-      })
-      .catch((error) => console.log(error));
-
-    axios
-      .get("http://localhost/categories/")
-      .then((res) => {
-        this.categories = res.data;
-      })
-      .catch((error) => console.log(error));
-  },
   methods: {
-    update() {
-      axios
-        .put("http://localhost/products/" + this.product.product_ID, this.product)
-        .then((res) => {
-            console.log(res);
-          this.$router.push("/products");
-        })
-        .catch((error) => console.log(error));
+    async fetchProduct() {
+      try {
+        const response = await axios.get(`http://localhost/products/${this.id}`);
+        this.product = response.data;
+      } catch (error) {
+        console.error("Failed to fetch product:", error);
+      }
     },
+    async fetchCategories() {
+      try {
+        const response = await axios.get("http://localhost/categories/");
+        this.categories = response.data;
+      } catch (error) {
+        console.error("Failed to fetch categories:", error);
+      }
+    },
+    async update() {
+      try {
+        await axios.put(
+          `http://localhost/products/${this.product.product_ID}`,
+          this.product
+        );
+        this.$router.push("/products");
+      } catch (error) {
+        console.error("Failed to update product:", error);
+      }
+    },
+    cancel() {
+      this.$router.push("/products");
+    },
+  },
+  mounted() {
+    this.fetchProduct();
+    this.fetchCategories();
   },
 };
 </script>
 
-<style>
+<style scoped>
+/* Optional scoped styles for the form */
 </style>
