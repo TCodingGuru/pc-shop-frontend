@@ -1,10 +1,6 @@
 <template>
   <div class="container">
     <h2 class="mt-3 mt-lg-5">Product catalogue:</h2>
-    <p>
-      Here you can find any item you are looking for. Some items might not be in stock but they will be restocked as soon as possible.
-    </p>
-
     <!-- Show add button only for Admins -->
     <div class="m-1" v-if="isAdmin">
       <router-link to="/addProduct">+ Add new product</router-link>
