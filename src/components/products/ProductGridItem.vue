@@ -32,11 +32,24 @@
           </div>
 
           <!-- General user: Add to cart -->
-          <button type="button" class="btn">Add to Cart</button>
+          <button type="button" class="btn" @click="openModal">Add to Cart</button>
         </div>
       </div>
     </div>
   </div>
+  <div v-if="showModal" class="modal-overlay">
+  <div class="modal-content">
+    <h5>Add {{ product.name }} to cart</h5>
+    <label>
+      Quantity:
+      <input type="number" v-model.number="quantity" min="1" :max="product.amount" />
+    </label>
+    <div class="modal-actions mt-3">
+      <button class="btn" @click="confirmAddToCart">Add</button>
+      <button class="btn" @click="closeModal">Cancel</button>
+    </div>
+  </div>
+</div>
 </template>
 
 <script>
@@ -45,8 +58,31 @@ export default {
   props: {
     product: Object,
   },
+  data() {
+    return {
+      showModal: false,
+      quantity: 1,
+    };
+  },
+  methods: {
+    openModal() {
+      this.quantity = 1;
+      this.showModal = true;
+    },
+    closeModal() {
+      this.showModal = false;
+    },
+    confirmAddToCart() {
+      this.$emit('addToCart', {
+        product: this.product,
+        quantity: this.quantity,
+      });
+      this.closeModal();
+    },
+  },
 };
 </script>
+
 
 <style scoped>
 .col-sm-6.col-lg-3 {
@@ -112,5 +148,28 @@ export default {
 .card .btn:focus {
   outline: none;
   box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.2);
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  min-width: 300px;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
 }
 </style>

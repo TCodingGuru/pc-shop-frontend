@@ -7,13 +7,9 @@
     </div>
 
     <!-- Product Grid -->
-    <div id="row" class="row" v-if="isLoggedIn">
-      <product-grid-item
-        v-for="product in products"
-        :key="product.product_ID"
-        :product="product"
-        @deleteProduct="deleteProduct"
-      />
+    <div id="row" class="row">
+      <product-grid-item v-for="product in products" :key="product.product_ID" :product="product"
+        @addToCart="handleAddToCart" @deleteProduct="deleteProduct" />
     </div>
 
     <div class="container d-flex justify-content-center">
@@ -22,6 +18,7 @@
     </div>
   </div>
 </template>
+
 
 <script>
 import ProductGridItem from './ProductGridItem.vue';
@@ -38,15 +35,13 @@ export default {
       limit: 3,
       isLoading: false,
       error: null,
+      cart: [],
     };
   },
 
   computed: {
     isAdmin() {
       return this.$store.state.role === 'Admin';
-    },
-    isLoggedIn() {
-      return !!this.$store.state.token;
     },
   },
 
@@ -103,10 +98,18 @@ export default {
       }
     },
   },
+  handleAddToCart({ product, quantity }) {
+    const existing = this.cart.find(p => p.product_ID === product.product_ID);
+    if (existing) {
+      existing.quantity += quantity;
+    } else {
+      this.cart.push({ ...product, quantity });
+    }
+    console.log("Cart:", this.cart);
+  },
 
   mounted() {
     this.fetch();
   },
 };
 </script>
-
