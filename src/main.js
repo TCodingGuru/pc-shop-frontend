@@ -7,7 +7,7 @@ import ProductGrid from "./components/products/ProductGrid.vue";
 import EditProduct from "./components/products/editProduct.vue";
 import AddProduct from "./components/products/addProduct.vue";
 import Login from "./components/Login.vue";
-import Cart from "./components/Cart.vue";
+import Cart from './components/Cart.vue';
 
 // vuex
 import store from "./store/store";
