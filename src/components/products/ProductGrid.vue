@@ -99,14 +99,19 @@ export default {
     },
   },
   handleAddToCart({ product, quantity }) {
-    const existing = this.cart.find(p => p.product_ID === product.product_ID);
+    const savedCart = JSON.parse(localStorage.getItem("cart") || "[]");
+    const existing = savedCart.find(p => p.product_ID === product.product_ID);
+
     if (existing) {
       existing.quantity += quantity;
     } else {
-      this.cart.push({ ...product, quantity });
+      savedCart.push({ ...product, quantity });
     }
-    console.log("Cart:", this.cart);
-  },
+
+    localStorage.setItem("cart", JSON.stringify(savedCart));
+    alert(`${product.name} added to cart!`);
+  }
+  ,
 
   mounted() {
     this.fetch();

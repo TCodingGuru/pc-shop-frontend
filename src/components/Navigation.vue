@@ -11,27 +11,24 @@
           <li class="nav-item">
             <router-link to="/products" class="nav-link">Products</router-link>
           </li>
+          <li class="nav-item">
+            <router-link to="/cart" class="nav-link">
+              🛒 Cart<span v-if="cartItemCount > 0"> ({{ cartItemCount }})</span>
+            </router-link>
+          </li>
         </ul>
       </div>
 
       <!-- Navbar Right -->
-      <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
-        <ul class="navbar-nav ms-auto">
-          <li class="nav-item">
-            <button 
-              v-if="$store.state.logged_in" 
-              class="nav-link btn btn-link p-0 text-decoration-none"
-              @click="logout">
-              Logout
-            </button>
-            <router-link 
-              v-else 
-              to="/login" 
-              class="nav-link">
-              Login
-            </router-link>
-          </li>
-        </ul>
+      <div class="navbar-nav ms-auto">
+        <li class="nav-item">
+          <button v-if="$store.state.logged_in" class="nav-link btn btn-link p-0 text-decoration-none" @click="logout">
+            Logout
+          </button>
+          <router-link v-else to="/login" class="nav-link">
+            Login
+          </router-link>
+        </li>
       </div>
 
     </div>
@@ -41,6 +38,11 @@
 <script>
 export default {
   name: 'Navigation',
+  computed: {
+    cartItemCount() {
+      return this.$store.getters.cartItemCount;
+    }
+  },
   methods: {
     logout() {
       this.$store.dispatch('logout')
@@ -52,7 +54,3 @@ export default {
   },
 }
 </script>
-
-<style scoped>
-/* Optional custom styling */
-</style>
