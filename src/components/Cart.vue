@@ -43,17 +43,20 @@ export default {
       }
       this.saveCart();
     },
-    removeItem(index) {
-      this.cart.splice(index, 1);
-      this.saveCart();
+    removeItem(productId) {
+      const index = this.cart.findIndex(item => item.product_ID === productId);
+      if (index !== -1) {
+        this.cart.splice(index, 1);
+        this.saveCart();
+      }
     },
     loadCart() {
       const saved = localStorage.getItem("cart");
-      console.log(saved)
       if (saved) {
-     this.cart = JSON.parse(saved).map(item => ({
-      ...item,
-      price: Number(item.price), }));
+        this.cart = JSON.parse(saved).map(item => ({
+          ...item,
+          price: Number(item.price),
+        }));
       }
     },
     saveCart() {
