@@ -97,21 +97,20 @@ export default {
         this.fetch();
       }
     },
-  },
-  handleAddToCart({ product, quantity }) {
+      handleAddToCart({ product, quantity }) {
     const savedCart = JSON.parse(localStorage.getItem("cart") || "[]");
     const existing = savedCart.find(p => p.product_ID === product.product_ID);
 
     if (existing) {
       existing.quantity += quantity;
     } else {
-      savedCart.push({ ...product, quantity });
+      savedCart.push({ ...product, quantity, price: Number(product.price) });
     }
 
     localStorage.setItem("cart", JSON.stringify(savedCart));
     alert(`${product.name} added to cart!`);
   }
-  ,
+  },
 
   mounted() {
     this.fetch();

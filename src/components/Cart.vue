@@ -5,25 +5,16 @@
     <div v-if="cart.length === 0" class="text-muted">Your cart is empty.</div>
 
     <div v-else class="cart-items">
-      <div
-        class="card mb-3"
-        v-for="item in cart"
-        :key="item.product.product_ID"
-      >
+      <div class="card mb-3" v-for="item in cart" :key="item.product_ID">
         <div class="card-body d-flex justify-content-between align-items-center">
           <div>
-            <h5>{{ item.product.name }}</h5>
-            <p class="mb-1">Price: € {{ item.product.price.toFixed(2) }}</p>
-            <p class="mb-1">Subtotal: € {{ (item.product.price * item.quantity).toFixed(2) }}</p>
-            <input
-              type="number"
-              :value="item.quantity"
-              :min="1"
-              :max="item.product.amount"
-              @change="updateQuantity(item.product.product_ID, $event.target.valueAsNumber)"
-            />
+            <h5>{{ item.name }}</h5>
+            <p class="mb-1">Price: € {{ item.price.toFixed(2) }}</p>
+            <p class="mb-1">Subtotal: € {{ (item.price * item.quantity).toFixed(2) }}</p>
+            <input type="number" :value="item.quantity" :min="1" :max="item.amount"
+              @change="updateQuantity(item.product_ID, $event.target.valueAsNumber)" />
           </div>
-          <button class="btn btn-danger" @click="removeItem(item.product.product_ID)">Remove</button>
+          <button class="btn btn-danger" @click="removeItem(item.product_ID)">Remove</button>
         </div>
       </div>
 
@@ -58,8 +49,11 @@ export default {
     },
     loadCart() {
       const saved = localStorage.getItem("cart");
+      console.log(saved)
       if (saved) {
-        this.cart = JSON.parse(saved);
+     this.cart = JSON.parse(saved).map(item => ({
+      ...item,
+      price: Number(item.price), }));
       }
     },
     saveCart() {
