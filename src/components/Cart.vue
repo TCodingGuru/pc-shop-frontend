@@ -30,6 +30,8 @@
 </template>
 
 <script>
+import axios from '../axios-auth';
+
 export default {
   name: "Cart",
   data() {
@@ -73,10 +75,12 @@ export default {
     },
     async checkout() {
       try {
-        const response = await axios.post('/checkout', {
-          cart: this.$store.getters.cartItems,
-          username: this.$store.state.username
+        console.log(this.$store.state.token)
+        const response = await axios.post('http://localhost/checkout', {
+           // cart: this.$store.getters.cartItems,
+          items: this.$store.getters.cartItems
         });
+
         alert("Invoice sent to your email!");
         this.$store.commit('clearCart');
         this.$router.push('/');

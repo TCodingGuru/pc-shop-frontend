@@ -102,7 +102,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axios from '../../axios-auth';
 
 export default {
   name: 'AddProduct',
@@ -132,6 +132,8 @@ export default {
   methods: {
     async add() {
       try {
+        console.log("hey hieronder axios")
+        console.log(axios.defaults.headers.common['Authorization']);
         const res = await axios.post('http://localhost/products', this.product);
         this.stock.product_ID = res.data.product_ID;
         await axios.post('http://localhost/stocks', this.stock);
