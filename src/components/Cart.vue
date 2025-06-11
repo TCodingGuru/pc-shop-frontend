@@ -20,6 +20,12 @@
 
       <h4 class="text-end">Total: € {{ totalPrice.toFixed(2) }}</h4>
     </div>
+    <button class="btn btn-success" @click="checkout" :disabled="!isLoggedIn">
+      Checkout
+    </button>
+    <p v-if="!isLoggedIn" class="text-danger">
+      Please log in to proceed with checkout.
+    </p>
   </div>
 </template>
 
@@ -34,6 +40,9 @@ export default {
   computed: {
     totalPrice() {
       return this.cart.reduce((total, item) => total + item.price * item.quantity, 0);
+    },
+    isLoggedIn() {
+      return this.$store.state.logged_in === true;
     },
   },
   methods: {
@@ -61,6 +70,20 @@ export default {
     },
     saveCart() {
       localStorage.setItem("cart", JSON.stringify(this.cart));
+    },
+    async checkout() {
+      try {
+        const response = await axios.post('/checkout', {
+          cart: this.$store.getters.cartItems,
+          username: this.$store.state.username
+        });
+        alert("Invoice sent to your email!");
+        this.$store.commit('clearCart');
+        this.$router.push('/');
+      } catch (error) {
+        console.error("Checkout failed:", error);
+        alert("Checkout failed. Please try again.");
+      }
     },
   },
   mounted() {
