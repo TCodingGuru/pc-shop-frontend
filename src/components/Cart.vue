@@ -75,10 +75,13 @@ export default {
     },
     async checkout() {
       try {
-        console.log(this.$store.state.token)
+        const items = this.cart.map(item => ({
+          product_ID: item.product_ID,
+          quantity: item.quantity
+        }));
+        
         const response = await axios.post('http://localhost/checkout', {
-           // cart: this.$store.getters.cartItems,
-          items: this.$store.getters.cartItems
+          items
         });
 
         alert("Invoice sent to your email!");
