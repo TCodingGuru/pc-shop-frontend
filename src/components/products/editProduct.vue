@@ -31,6 +31,20 @@
             />
           </div>
 
+            <!-- Product Price -->
+          <div class="form-group">
+            <label for="productPrice">Stock:</label>
+            <input
+              type="number"
+              class="form-control"
+              id="productPrice"
+              v-model="product.amount"
+              min="0"
+              step="0.01"
+              required
+            />
+          </div>
+
           <!-- Category -->
           <div class="form-group">
             <label for="productCat">Category:</label>
@@ -86,7 +100,8 @@
 </template>
 
 <script>
-import axios from "axios";
+import axios from '../../axios-auth';
+
 
 export default {
   name: "EditProduct",
@@ -143,7 +158,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-/* Optional scoped styles for the form */
-</style>

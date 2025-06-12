@@ -69,7 +69,7 @@ export default {
         this.$router.push("/login");
       }).catch(error => {
         if (error.response && error.response.status === 409) {
-          this.errorMessage = error.response.data.error;
+          this.errorMessage = error.response.data.errorMessage;
         } else {
           this.errorMessage = "An unexpected error occurred";
         }
