@@ -10,88 +10,44 @@
           <!-- Product Name -->
           <div class="form-group">
             <label for="productName">Product name:</label>
-            <input
-              type="text"
-              class="form-control"
-              id="productName"
-              placeholder="Enter product name..."
-              v-model="product.name"
-              required
-            />
+            <input type="text" class="form-control" id="productName" v-model="product.name" required />
           </div>
 
           <!-- Price -->
           <div class="form-group">
             <label for="productPrice">Price:</label>
-            <input
-              type="number"
-              class="form-control"
-              id="productPrice"
-              placeholder="Enter product price..."
-              v-model="product.price"
-              min="0"
-              required
-            />
+            <input type="number" class="form-control" id="productPrice" v-model="product.price" min="0" required />
           </div>
 
           <!-- Category -->
           <div class="form-group">
             <label for="productCategory">Category:</label>
-            <select
-              class="form-control"
-              id="productCategory"
-              v-model="product.category_ID"
-              required
-            >
-              <option
-                v-for="category in categories"
-                :key="category.category_ID"
-                :value="category.category_ID"
-              >
+            <select class="form-control" id="productCategory" v-model="product.category_ID" required>
+              <option v-for="category in categories" :key="category.category_ID" :value="category.category_ID">
                 {{ category.name }}
               </option>
             </select>
           </div>
 
-          <!-- Image URL -->
+          <!-- Image Upload -->
           <div class="form-group">
-            <label for="productImage">Image URL:</label>
-            <input
-              type="text"
-              class="form-control"
-              id="productImage"
-              placeholder="Enter image URL..."
-              v-model="product.image"
-            />
+            <label for="productImage">Upload Image:</label>
+            <input type="file" class="form-control-file" id="productImage" @change="onFileSelected" accept="image/*" />
+            <div v-if="imagePreview" class="mt-2">
+              <img :src="imagePreview" alt="Preview" class="img-thumbnail" style="max-width: 100%;" />
+            </div>
           </div>
 
           <!-- Stock Amount -->
           <div class="form-group">
             <label for="stockAmount">Stock Amount:</label>
-            <input
-              type="number"
-              class="form-control"
-              id="stockAmount"
-              placeholder="Enter stock amount..."
-              v-model="stock.amount"
-              min="0"
-            />
+            <input type="number" class="form-control" id="stockAmount" v-model="stock.amount" min="0" />
           </div>
 
           <!-- Buttons -->
           <div class="mt-2">
-            <button
-              type="button"
-              class="btn btn-danger m-1"
-              @click="$router.push('/products')"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              class="btn btn-success"
-              :disabled="!product.name || product.price <= 0"
-            >
+            <button type="button" class="btn btn-danger m-1" @click="$router.push('/products')">Cancel</button>
+            <button type="submit" class="btn btn-success" :disabled="!product.name || product.price <= 0">
               Add
             </button>
           </div>
@@ -119,6 +75,8 @@ export default {
         product_ID: 0,
         amount: 0,
       },
+      selectedFile: null,
+      imagePreview: null,
     };
   },
   mounted() {
@@ -130,11 +88,37 @@ export default {
       .catch(console.error);
   },
   methods: {
+    onFileSelected(event) {
+      this.selectedFile = event.target.files[0];
+      this.imagePreview = URL.createObjectURL(this.selectedFile);
+    },
     async add() {
       try {
+        // Step 1: Create the product (without image first)
         const res = await axios.post('http://localhost/products', this.product);
-        this.stock.product_ID = res.data.product_ID;
+        const productId = res.data.product_ID;
+        this.product.product_ID = productId;
+        this.stock.product_ID = productId;
+
+        // Step 2: Upload image if selected
+        if (this.selectedFile) {
+          const formData = new FormData();
+          formData.append('image', this.selectedFile);
+
+          const uploadRes = await axios.post(
+            `http://localhost/products/${productId}/upload`,
+            formData,
+            { headers: { 'Content-Type': 'multipart/form-data' } }
+          );
+
+          // Optional: Update the image field in the product if needed
+          this.product.image = uploadRes.data.image;
+        }
+
+        // Step 3: Create the stock record
         await axios.post('http://localhost/stocks', this.stock);
+
+        // Navigate back to product list
         this.$router.push('/products');
       } catch (error) {
         console.error(error);
@@ -155,7 +139,7 @@ form {
   border: 1px solid #dee2e6;
   border-radius: 0.75rem;
   padding: 2rem;
-  box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.05);
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.05);
 }
 
 /* Label styling */
@@ -170,7 +154,8 @@ label {
 }
 
 /* Input focus effect */
-input:focus, select:focus {
+input:focus,
+select:focus {
   border-color: #198754;
   box-shadow: 0 0 0 0.2rem rgba(25, 135, 84, 0.25);
   transition: 0.2s ease-in-out;
