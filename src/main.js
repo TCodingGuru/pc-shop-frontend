@@ -7,7 +7,8 @@ import ProductGrid from "./components/products/ProductGrid.vue";
 import EditProduct from "./components/products/editProduct.vue";
 import AddProduct from "./components/products/addProduct.vue";
 import Login from "./components/Login.vue";
-import Cart from './components/Cart.vue';
+import Register from "./components/Register.vue";
+import Cart from "./components/Cart.vue";
 
 // vuex
 import store from "./store/store";
@@ -18,6 +19,7 @@ const routes = [
   { path: "/editProduct/:id", component: EditProduct },
   { path: "/addProduct", component: AddProduct },
   { path: "/login", component: Login },
+  { path: "/register", component: Register },
   { path: "/cart", component: Cart },
 ];
 
