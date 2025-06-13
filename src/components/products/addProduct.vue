@@ -100,7 +100,12 @@ export default {
         this.product.product_ID = productId;
         this.stock.product_ID = productId;
 
-        // Step 2: Upload image if selected
+        console.log('Created product ID:', productId);
+
+        // Step 2: Create stock (so getOne works for upload)
+        await axios.post('http://localhost/stocks', this.stock);
+
+        // Step 3: Upload image if selected
         if (this.selectedFile) {
           const formData = new FormData();
           formData.append('image', this.selectedFile);
@@ -111,19 +116,18 @@ export default {
             { headers: { 'Content-Type': 'multipart/form-data' } }
           );
 
-          // Optional: Update the image field in the product if needed
+          // Step 4: Update product with image path
           this.product.image = uploadRes.data.image;
+          await axios.put(`http://localhost/products/${productId}`, this.product);
         }
 
-        // Step 3: Create the stock record
-        await axios.post('http://localhost/stocks', this.stock);
-
-        // Navigate back to product list
+        // Step 5: Navigate back to product list
         this.$router.push('/products');
       } catch (error) {
         console.error(error);
       }
-    },
+    }
+    ,
   },
 };
 </script>

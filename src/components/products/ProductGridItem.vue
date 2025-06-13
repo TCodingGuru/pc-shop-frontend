@@ -2,7 +2,8 @@
   <!-- Column for product card -->
   <div class="col-sm-6 col-lg-3">
     <div class="card h-100 d-flex flex-column justify-content-between">
-      <img :src="product.image" class="card-img-top p-3" alt="product" />
+    <img :src="`http://localhost${product.image}`" class="card-img-top p-3" alt="product" />
+
 
       <div class="card-body d-flex flex-column">
         <p class="text-muted mb-2">{{ product.category_Name }}</p>
