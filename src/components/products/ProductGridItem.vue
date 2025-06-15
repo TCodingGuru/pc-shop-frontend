@@ -2,7 +2,7 @@
   <!-- Column for product card -->
   <div class="col-sm-6 col-lg-3">
     <div class="card h-100 d-flex flex-column justify-content-between">
-    <img :src="`http://localhost${product.image}`" class="card-img-top p-3" alt="product" />
+      <img :src="`http://localhost${product.image}`" class="card-img-top p-3" alt="product" />
 
 
       <div class="card-body d-flex flex-column">
@@ -18,39 +18,33 @@
         <div class="mt-auto d-flex flex-wrap gap-2 justify-content-between">
           <!-- Admin options -->
           <div v-if="$store.state.role === 'Admin'" class="d-flex gap-2">
-            <router-link
-              :to="'/editProduct/' + product.product_ID"
-              class="btn"
-            >
+            <router-link :to="'/editProduct/' + product.product_ID" class="btn">
               Edit
             </router-link>
-            <button
-              class="btn"
-              @click="$emit('deleteProduct', product)"
-            >
+            <button class="btn" @click="$emit('deleteProduct', product)">
               Delete
             </button>
           </div>
 
           <!-- General user: Add to cart -->
-          <button type="button" class="btn" @click="openModal">Add to Cart</button>
+          <button type="button" class="btn" @click="openModal"  :disabled="product.amount <= 0">Add to Cart</button>
         </div>
       </div>
     </div>
   </div>
   <div v-if="showModal" class="modal-overlay">
-  <div class="modal-content">
-    <h5>Add {{ product.name }} to cart</h5>
-    <label>
-      Quantity:
-      <input type="number" v-model.number="quantity" min="1" :max="product.amount" />
-    </label>
-    <div class="modal-actions mt-3">
-      <button class="btn" @click="confirmAddToCart">Add</button>
-      <button class="btn" @click="closeModal">Cancel</button>
+    <div class="modal-content">
+      <h5>Add {{ product.name }} to cart</h5>
+      <label>
+        Quantity:
+        <input type="number" v-model.number="quantity" min="1" :max="product.amount"  @input="clampQuantity"/>
+      </label>
+      <div class="modal-actions mt-3">
+        <button class="btn" @click="confirmAddToCart">Add</button>
+        <button class="btn" @click="closeModal">Cancel</button>
+      </div>
     </div>
   </div>
-</div>
 </template>
 
 <script>
@@ -79,6 +73,14 @@ export default {
         quantity: this.quantity,
       });
       this.closeModal();
+    },
+    // cant exmploit input field
+      clampQuantity() {
+        if (this.quantity > this.product.amount) {
+          this.quantity = this.product.amount;
+        } else if (this.quantity < 1) {
+          this.quantity = 1;
+        }
     },
   },
 };
@@ -153,8 +155,11 @@ export default {
 
 .modal-overlay {
   position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0,0,0,0.5);
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;

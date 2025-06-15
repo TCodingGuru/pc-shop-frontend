@@ -80,7 +80,7 @@ export default {
           quantity: item.quantity
         }));
         
-        const response = await axios.post('http://localhost/checkout', {
+       await axios.post('http://localhost/checkout', {
           items
         });
 
